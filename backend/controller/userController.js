@@ -25,7 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 // @desc Register user
-// @route POST /api/users/register
+// @route POST /api/users
 // @access public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -40,7 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const user = await User.create({ name, email, password });
 
   if (user) {
-    generateToken(res, use._id);
+    generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
       name: user.name,
