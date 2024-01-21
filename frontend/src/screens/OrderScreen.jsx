@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {
-  useDeliverOrderMutation,
   useGetOrderDetailsQuery,
   useGetPaypalClientIdQuery,
   usePayOrderMutation,
@@ -24,9 +23,6 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-
-  const [deliverOrder, { isLoading: loadingDeliver }] =
-    useDeliverOrderMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -95,11 +91,6 @@ const OrderScreen = () => {
         return orderID;
       });
   }
-
-  const deliverHandler = async () => {
-    await deliverOrder(orderId);
-    refetch();
-  };
 
   return isLoading ? (
     <Loader />
@@ -228,29 +219,19 @@ const OrderScreen = () => {
                       </Button> */}
 
                       <div>
-                        <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        ></PayPalButtons>
+                        <PayPalButtons></PayPalButtons>
                       </div>
                     </div>
                   )}
                 </ListGroup.Item>
               )}
 
-              {loadingDeliver && <Loader />}
-
               {userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
                 !order.isDelivered && (
                   <ListGroup.Item>
-                    <Button
-                      type="button"
-                      className="btn btn-block"
-                      onClick={deliverHandler}
-                    >
+                    <Button type="button" className="btn btn-block">
                       Mark As Delivered
                     </Button>
                   </ListGroup.Item>
